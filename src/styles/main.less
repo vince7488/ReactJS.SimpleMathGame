@@ -21,7 +21,7 @@ header {
     justify-content: center;
 
     h1 {
-        font-family: Verdana, sans-serif;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
         font-size: 64px;
         color: #333;
     }
@@ -58,25 +58,26 @@ header {
 .star {
 	display: inline-block;
   margin: 0 15px;
+  
+  &:after {
+    content: "\2605";
+    font-size: 45px;
+  }
 }
 
-.star:after {
-  content: "\2605";
-  font-size: 45px;
-}
-
-.number {
+.btn-number {
   background-color: #eee;
   border: thin solid #ddd;
   width: 45px;
   height: 45px;
   margin: 10px;
   font-size: 25px;
-}
 
-.number:focus, .number:active {
-  outline: none;
-  border: thin solid #ddd;
+  &:focus,
+  &:active {
+    outline: none;
+    border: thin solid #ddd;
+  }
 }
 
 .timer {

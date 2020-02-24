@@ -4,10 +4,10 @@ import "./styles/main.less";
 import Icon from "./favicon.ico";
 
 const colors = {
-    available: 'lightgray',
-    used: 'lightgreen',
-    wrong: 'lightcoral',
-    temp: 'deepskyblue',
+  available: "rgb(230,230,230)",
+  used: "rgb(35,255,85)",
+  wrong: "rgb(235,20,35)",
+  temp: "rgb(235,195,20)"
 };
 
 // Math science
@@ -52,15 +52,21 @@ function StarsComponent(props) {
 }
 
 function NumButton(props) {
+    let setForecolor = "initial"; //I just want to to be special...
 
-    return (
-        <button 
-            className="btn-number" 
-            style={{backgroundColor: colors[props.btnStatus],}} //change the bg of the button from NumButton btnStatus
-            onClick={() => console.log(props.btnNum)}>
-            {props.btnNum}
+    if (props.btnStatus == 'wrong') {
+        setForecolor = 'rgb(255,255,255)'; //colour font to white because of the red bg, other wise, default font colour
+    } 
+
+      return (
+        <button
+          className="btn-number"
+          style={{ backgroundColor: colors[props.btnStatus],color: setForecolor }} //change the bg of the button from NumButton btnStatus
+          onClick={() => props.onClick(props.btnNum,props.btnStatus)} //pass btnNum value, pass Status ==> Game()
+        >
+          {props.btnNum}
         </button>
-    );
+      );
 }
 
 function Game() {
@@ -74,9 +80,9 @@ function Game() {
 
     const wrongSumNumbers = utils.sum(tempNum) > objStars;
 
-    //const as inner function 
+    //const as inner function | currentNumberStatus determines the status of NumButton Component
     const currentNumberStatus = (numIndex) => {
-
+        //numIndex plays as the button values
         if ( !availableNum.includes(numIndex) ) {
             return 'used'; //see ref, const color on global
         }
@@ -88,6 +94,31 @@ function Game() {
         return 'available';
 
     };
+
+    //When you click one of the NumButton, take the btnNum value and btnStatus state
+    const onNumButtonClk = (getBtnNum,getBtnStatus) => {
+        if (getBtnStatus == 'used') {
+            alert('Value is already used!');
+        }
+
+        //sub-sub function - set a newTempNum
+        const newTempNums = 
+        getBtnStatus === 'available' ?
+        tempNum.concat(getBtnNum)
+        : tempNum.filter(cn => cn !== getBtnNum);
+        if ( utils.sum(newTempNums) !== objStars ) {
+            //when your 
+            setTempNum(newTempNums);
+        } else {
+            const newAvailableNums = availableNum.filter( n => !newTempNums.includes(n) );
+
+            setObjStars(utils.randomSumIn(newAvailableNums,9));
+            setAvailableNum(newAvailableNums);
+            setTempNum([]);
+        }
+
+        //console.log(props.btnNum)
+    }
 
     return (
         <section>
@@ -107,7 +138,9 @@ function Game() {
                             <NumButton 
                                 key={numIndex}
                                 btnStatus={currentNumberStatus(numIndex)}
-                                btnNum={numIndex} />
+                                btnNum={numIndex} 
+                                onClick={onNumButtonClk} //run the function to set Status; 
+                            />
                         )}
                     </div>
                 </div>

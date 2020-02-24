@@ -40,8 +40,28 @@ const utils = {
     },
 };
 
+function StarsComponent(props) {
+
+    return(
+        <>
+            {utils.range(1,props.randStarNum).map( starId =>
+                <div key={starId} className="star" />    
+            )}
+        </>
+    );
+}
+
+function NumButton(props) {
+
+    return (
+        <button className="btn-number" onClick={() => console.log(props.btnNum)}>
+            {props.btnNum}
+        </button>
+    );
+}
+
 function Game() {
-    const [objStars, setObjStars] = utils.random(1,9);
+    const [objStars, setObjStars] = useState(utils.random(1,9));
 
     return (
         <section>
@@ -54,13 +74,11 @@ function Game() {
             </h2>
                 <div className="body">
                     <div className="left">
-                        {utils.range(1,objStars).map( starId =>
-                            <div key={starId} className="star" />    
-                        )}
+                        <StarsComponent randStarNum={objStars} />
                     </div>
                     <div className="right">
                         {utils.range(1,9).map(numIndex =>
-                            <button key={numIndex} className="number">{numIndex}</button>
+                            <NumButton key={numIndex} btnNum={numIndex} />
                         )}
                     </div>
                 </div>

@@ -34,6 +34,6 @@ Additionally, run the following:
 * `npm i --save-dev css-loader style-loader postcss-loader`
 * `npm i --save-dev autoprefixer cssnano`
 * `npm i --save-dev mini-css-extract-plugin`
-* `npm i --save-dev less-plugin-clean-css`
+* `npm i --save-dev less-plugin-clean-css@latest`
 * `npm i --save-dev file-loader`
 * `npm i --save-dev terser-webpack-plugin`

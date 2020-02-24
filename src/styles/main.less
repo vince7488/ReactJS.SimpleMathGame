@@ -9,8 +9,84 @@
 @strict-md: ~"(min-width:996px) and (max-width:1199px)";
 @strict-lg: ~"(min-width:1200px) and (max-width:1599px)";
 
-h1 {
-    font-family: Verdana, sans-serif;
-    font-size: 64px;
-    color: #333;
+body {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, Verdana, sans-serif;
+    font-size: 16px;
+    text-rendering: geometricPrecision;
+}
+
+header {
+    display: flex;
+    position: relative;
+    justify-content: center;
+
+    h1 {
+        font-family: Verdana, sans-serif;
+        font-size: 64px;
+        color: #333;
+    }
+}
+
+.game {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.body {
+  display: flex;
+}
+
+.help {
+  color: #666;
+  margin: 10px;
+  text-align: center;
+}
+
+.left {
+  text-align: center;
+  width: 50%;
+  border: thin solid #ddd;
+}
+
+.right {
+  text-align: center;
+  padding: 10px;
+  width: 50%;
+  border: thin solid #ddd;
+}
+
+.star {
+	display: inline-block;
+  margin: 0 15px;
+}
+
+.star:after {
+  content: "\2605";
+  font-size: 45px;
+}
+
+.number {
+  background-color: #eee;
+  border: thin solid #ddd;
+  width: 45px;
+  height: 45px;
+  margin: 10px;
+  font-size: 25px;
+}
+
+.number:focus, .number:active {
+  outline: none;
+  border: thin solid #ddd;
+}
+
+.timer {
+	color: #666;
+  margin-top: 3px;
+  margin-left: 3px;
+}
+
+.game-done .message {
+  font-size: 250%;
+  font-weight: bold;
+  margin: 15px;
 }

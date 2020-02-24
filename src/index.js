@@ -7,7 +7,7 @@ const colors = {
     available: 'lightgray',
     used: 'lightgreen',
     wrong: 'lightcoral',
-    candidate: 'deepskyblue',
+    temp: 'deepskyblue',
 };
 
 // Math science
@@ -54,7 +54,10 @@ function StarsComponent(props) {
 function NumButton(props) {
 
     return (
-        <button className="btn-number" onClick={() => console.log(props.btnNum)}>
+        <button 
+            className="btn-number" 
+            style={{backgroundColor: colors[props.btnStatus],}} //change the bg of the button from NumButton btnStatus
+            onClick={() => console.log(props.btnNum)}>
             {props.btnNum}
         </button>
     );
@@ -62,6 +65,29 @@ function NumButton(props) {
 
 function Game() {
     const [objStars, setObjStars] = useState(utils.random(1,9));
+
+    //Represent the ideal states for how the buttons will play out
+    //tempNum
+    const [tempNum,setTempNum] = useState([]); //empty array to take input
+    //availableNum
+    const [availableNum, setAvailableNum] = useState(utils.range(1,9)); //set a range of numbers for the btns
+
+    const wrongSumNumbers = utils.sum(tempNum) > objStars;
+
+    //const as inner function 
+    const currentNumberStatus = (numIndex) => {
+
+        if ( !availableNum.includes(numIndex) ) {
+            return 'used'; //see ref, const color on global
+        }
+
+        if ( tempNum.includes(numIndex) ) {
+            return (wrongSumNumbers) ? 'wrong' : 'temp';
+        }
+
+        return 'available';
+
+    };
 
     return (
         <section>
@@ -78,7 +104,10 @@ function Game() {
                     </div>
                     <div className="right">
                         {utils.range(1,9).map(numIndex =>
-                            <NumButton key={numIndex} btnNum={numIndex} />
+                            <NumButton 
+                                key={numIndex}
+                                btnStatus={currentNumberStatus(numIndex)}
+                                btnNum={numIndex} />
                         )}
                     </div>
                 </div>

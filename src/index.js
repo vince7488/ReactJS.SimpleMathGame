@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import "./styles/main.less";
 import Icon from "./favicon.ico";
@@ -56,7 +56,7 @@ function NumButton(props) {
 
     if (props.btnStatus == 'wrong') {
         setForecolor = 'rgb(255,255,255)'; //colour font to white because of the red bg, other wise, default font colour (initial)
-    } 
+    }
 
     return (
     <button
@@ -73,33 +73,61 @@ function NumButton(props) {
 function ResetGame(props) {
     //see the controller for this button in const reInitialise
     return (
-        <button onClick={props.onClick}>
-            Play Again!
-        </button>
+        <>
+            <div>
+                <span className={`game-end-stat ${((props.gameStat === 'lost') ? 'islost' : 'iswon')}`}>
+                    {(props.gameStat === 'lost') ? 'Game Over' : 'Great!'}
+                </span>
+            </div>
+
+            <button onClick={props.onClick}>
+                Play Again!
+            </button>
+        </>
     );
 }
 
 function Game() {
-    //create stars randomly
-    const [objStars, setObjStars] = useState(utils.random(1,9));
-
-    //Represent the ideal states for how the buttons will play out
-    //tempNum
+    const [objStars, setObjStars] = useState(utils.random(1, 9)); //create stars randomly
     const [tempNum,setTempNum] = useState([]); //empty array to take input
-    //availableNum
-    const [availableNum, setAvailableNum] = useState(utils.range(1,9)); //set a range of numbers for the btns
+    const [availableNum, setAvailableNum] = useState(utils.range(1,9)); //set a range of numbers for the input btns
+    const [countDownTimer,setCountDownTimer] = useState(10); //Initialise the countDown Timer to 10
+    
+    //React.useEffect to run the JS script setTimeout()
+    useEffect(() => {
+
+        //as long as countDownTimer has not been depleted to 0 
+        //AND playing btns not used up...
+        if (countDownTimer > 0 && availableNum.length > 0) {
+            //add const initTimer for cleaning useEffect...
+            const initTimer = setTimeout(() => {
+                setCountDownTimer(countDownTimer - 1); //subtract "1" from countDown state...
+            }, 1000); //...every 1000 milliseconds
+            console.log('initTimer ended');
+
+            return () => {
+                clearTimeout(initTimer)
+                console.log('initTimer refreshed');
+            };
+        }
+    });
 
     //variable to trigger when Sum is wrong
     const wrongSumNumbers = utils.sum(tempNum) > objStars;
 
-    //variable to trigger when game has no more numbers available
-    const gameComplete = availableNum.length === 0;
+    //const gameComplete = availableNum.length === 0; //outed, in favour of gameStat
+
+    //initialise game Status: if availableNum = 0, win; if countDownTimer = 0 & availableNum > 0, lost; If Neither, game status is active.
+    const gameStat = (availableNum.length === 0) ? 'win' :
+        (countDownTimer <= 0 && availableNum.length > 0) ? 'lost' : 'active';
 
     //controlling component for ResetGame()
     const reInitialise = props => {
         setObjStars(utils.random(1, 9));
         setAvailableNum(utils.range(1, 9));
         setTempNum([]);
+        setCountDownTimer(10);
+        console.clear();
     }
 
     //const as inner function | currentNumberStatus determines the status of NumButton Component
@@ -120,8 +148,12 @@ function Game() {
     //When you click one of the NumButton, take the btnNum value and btnStatus state
     const onNumButtonClk = (getBtnNum,getBtnStatus) => {
         //from const currentNumberStatus component...
-        if (getBtnStatus == 'used') {
-            alert('Value is already used!');
+        if (getBtnStatus === 'used' && gameStat === 'active') {
+            alert('Value is already used!'); //picked a button already used
+        } else if (gameStat !== 'active') {
+            return; //do nothing when game is not active (lost or won)
+        } else {
+            console.log(getBtnNum) //Just tripping...
         }
 
         //sub-sub function - set a newTempNum
@@ -143,8 +175,6 @@ function Game() {
             //Clear the TempNum array
             setTempNum([]);
         }
-
-        console.log(getBtnNum) //Just tripping...
     }
 
     return (
@@ -160,7 +190,7 @@ function Game() {
 
                     <div className="left">
                         {
-                            gameComplete ? <ResetGame onClick={reInitialise} />
+                            (gameStat !== 'active') ? <ResetGame onClick={reInitialise} gameStat={gameStat} />
                             :
                             <StarsComponent randStarNum={objStars} />
                         }
@@ -180,7 +210,7 @@ function Game() {
 
                 </div>
 
-                <div className="timer">Time Remaining: 10</div>
+                <div className="timer">Time Remaining: {countDownTimer}</div>
             </div>
         </section>
     );

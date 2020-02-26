@@ -39,13 +39,58 @@ const utils = {
         return sums[utils.random(0, sums.length - 1)];
     },
     //adding a new math util to create a random number from a set min and max
-    randomiseSession: (min,max) => {
+    randomise: (min,max) => {
         return Math.floor(Math.random(min) * Math.floor(max));
     },
 };
 
-function StarsComponent(props) {
+//creating a custom hook for StarSums() States
+function useGameState() {
+    const [objStars, setObjStars] = useState(utils.random(1, 9)); //create stars randomly
+    const [tempNum, setTempNum] = useState([]); //empty array to take input
+    const [availableNum, setAvailableNum] = useState(utils.range(1, 9)); //set a range of numbers for the input btns
+    const [countDownTimer, setCountDownTimer] = useState(10); //Initialise the countDown Timer to 10
 
+    //React.useEffect to run the JS script setTimeout()
+    useEffect(() => {
+        //as long as countDownTimer has not been depleted to 0 
+        //AND playing btns not used up...
+        if (countDownTimer > 0 && availableNum.length > 0) {
+            //add const initTimer for cleaning useEffect...
+            const initTimer = setTimeout(() => {
+                setCountDownTimer(countDownTimer - 1); //subtract "1" from countDown state...
+            }, 1000); //...every 1000 milliseconds
+
+            return () => {
+                //"dismount", after counting down 1 sec
+                clearTimeout(initTimer)
+            };
+        }
+    });
+
+    //manage playing button states
+    const setGameState = (newTempNums) => {
+        //when the sum of your newTempNum is not equal to the current num of stars 
+        if (utils.sum(newTempNums) !== objStars) {
+            //put the newTempNum in the array group (marking it as "used")
+            setTempNum(newTempNums);
+        } else {
+            //if a number is not in the Tempnum array storage, mark it as newAvailableNum
+            const newAvailableNums = availableNum.filter(n => !newTempNums.includes(n));
+            //refresh the number of stars now with min of Currently AvailableNums and the max (9)
+            setObjStars(utils.randomSumIn(newAvailableNums, 9));
+            //Set the new AvailableNums
+            setAvailableNum(newAvailableNums);
+            //Clear the TempNum array
+            setTempNum([]);
+        }
+    }
+
+    return { objStars,tempNum,availableNum,countDownTimer,setGameState };
+}
+
+function StarsComponent(props) {
+    //returns a random array of stars... in which you pick a number OR numbers whose sum and/or value is equal to the stars displayed
     return(
         <>
             {utils.range(1,props.randStarNum).map( starId =>
@@ -73,7 +118,7 @@ function NumButton(props) {
     );
 }
 
-//Component Button to reset the game after its done
+//Component Module to show game status (win,lost) and an action button to play again
 function ResetGame(props) {
     //see the controller for this button in const reInitialise
     return (
@@ -84,38 +129,26 @@ function ResetGame(props) {
                 </span>
             </div>
 
-            <button onClick={props.onClick}>
+            <button type="reset" onClick={props.onClick}>
                 Play Again!
             </button>
         </>
     );
 }
 
-//Previously as Game()
+//Previously was Game() component
 function StarSums(props) {
-    const [objStars, setObjStars] = useState(utils.random(1, 9)); //create stars randomly
-    const [tempNum,setTempNum] = useState([]); //empty array to take input
-    const [availableNum, setAvailableNum] = useState(utils.range(1,9)); //set a range of numbers for the input btns
-    const [countDownTimer,setCountDownTimer] = useState(10); //Initialise the countDown Timer to 10
+
+    //Manage game States via useGameState custom hook
+    const {
+        objStars,
+        tempNum,
+        availableNum,
+        countDownTimer,
+        setGameState,
+    } = useGameState();
     
-    //React.useEffect to run the JS script setTimeout()
-    useEffect(() => {
-        //as long as countDownTimer has not been depleted to 0 
-        //AND playing btns not used up...
-        if (countDownTimer > 0 && availableNum.length > 0) {
-            //add const initTimer for cleaning useEffect...
-            const initTimer = setTimeout(() => {
-                setCountDownTimer(countDownTimer - 1); //subtract "1" from countDown state...
-            }, 1000); //...every 1000 milliseconds
-            console.log('initTimer ended');
-
-            return () => {
-                clearTimeout(initTimer)
-                console.log('initTimer refreshed');
-            };
-        }
-    });
-
+    ///// start of game caclulations
     //variable to trigger when Sum is wrong
     const wrongSumNumbers = utils.sum(tempNum) > objStars;
 
@@ -125,7 +158,7 @@ function StarSums(props) {
     const gameStat = (availableNum.length === 0) ? 'win' :
         (countDownTimer <= 0 && availableNum.length > 0) ? 'lost' : 'active';
 
-    //Now Unused... "unmounting method" is now used by Game() to launch the StarSums() component
+    //const reInitialise now Unused... "unmounting method" is now used by Game() to launch the StarSums() component
     /* const reInitialise = props => {
         setObjStars(utils.random(1, 9));
         setAvailableNum(utils.range(1, 9));
@@ -165,20 +198,8 @@ function StarSums(props) {
         getBtnStatus === 'available' ?
         tempNum.concat(getBtnNum) 
         : tempNum.filter(cn => cn !== getBtnNum); //if btn is available, set current Num as a newTempNum
-        //when the sum of your newTempNum is not equal to the current num of stars 
-        if ( utils.sum(newTempNums) !== objStars ) {
-            //put the newTempNum in the array group (marking it as "used")
-            setTempNum(newTempNums);
-        } else {
-            //if a number is not in the Tempnum array storage, mark it as newAvailableNum
-            const newAvailableNums = availableNum.filter( n => !newTempNums.includes(n) );
-            //refresh the number of stars now with min of Currently AvailableNums and the max (9)
-            setObjStars(utils.randomSumIn(newAvailableNums,9));
-            //Set the new AvailableNums
-            setAvailableNum(newAvailableNums);
-            //Clear the TempNum array
-            setTempNum([]);
-        }
+        
+        setGameState(newTempNums); //invoke GameState with newTempNums
     }
 
     return (
@@ -220,7 +241,7 @@ function StarSums(props) {
     );
 }
 
-//Made Game() component as a container of the "game" (StarSums())
+//Made Game() component as a container of the "game" (StarSums()) = now a component to manage sessions
 function Game() {
 
     //create a 'sessionID' to use as a game reset action instead of const reInitialise
@@ -231,7 +252,7 @@ function Game() {
 
     return (
         //The game component
-        <StarSums key={sessionID} startNewSession={() => setSessionID(utils.randomiseSession(2,1000000))} />
+        <StarSums key={sessionID} startNewSession={() => setSessionID(utils.randomise(2,1000000))} />
     );
 }
 

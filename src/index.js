@@ -38,6 +38,10 @@ const utils = {
         }
         return sums[utils.random(0, sums.length - 1)];
     },
+    //adding a new math util to create a random number from a set min and max
+    randomiseSession: (min,max) => {
+        return Math.floor(Math.random(min) * Math.floor(max));
+    },
 };
 
 function StarsComponent(props) {

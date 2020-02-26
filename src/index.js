@@ -203,17 +203,17 @@ function StarSums(props) {
     }
 
     return (
-        <section>
+        <>
             <header>
                 <h1>Star Sum!</h1>
             </header>
-            <div className="game">
+            <section>
                 <h2 className="help">
                     Pick 1 or more numbers that sum to the number of stars
-            </h2>
-                <div className="body">
+                </h2>
+                <div className="game-container">
 
-                    <div className="left">
+                    <div className="stars-panel">
                         {
                             (gameStat !== 'active') ? <ResetGame onClick={props.startNewSession} gameStat={gameStat} />
                             :
@@ -222,7 +222,7 @@ function StarSums(props) {
                         
                     </div>
 
-                    <div className="right">
+                    <div className="numbers-panel">
                         {utils.range(1,9).map(numIndex =>
                             <NumButton 
                                 key={numIndex}
@@ -236,8 +236,8 @@ function StarSums(props) {
                 </div>
 
                 <div className="timer">Time Remaining: {countDownTimer}</div>
-            </div>
-        </section>
+            </section>
+        </>
     );
 }
 

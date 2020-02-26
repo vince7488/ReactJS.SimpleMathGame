@@ -125,14 +125,14 @@ function Game() {
     const gameStat = (availableNum.length === 0) ? 'win' :
         (countDownTimer <= 0 && availableNum.length > 0) ? 'lost' : 'active';
 
-    //controlling component for ResetGame()
-    const reInitialise = props => {
+    //Now Unused... "unmounting method" is now used by Game() to launch the StarSums() component
+    /* const reInitialise = props => {
         setObjStars(utils.random(1, 9));
         setAvailableNum(utils.range(1, 9));
         setTempNum([]);
         setCountDownTimer(10);
         console.clear();
-    }
+    } */
 
     //const as inner function | currentNumberStatus determines the status of NumButton Component
     const currentNumberStatus = (numIndex) => {

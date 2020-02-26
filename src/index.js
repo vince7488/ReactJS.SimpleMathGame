@@ -91,7 +91,8 @@ function ResetGame(props) {
     );
 }
 
-function Game() {
+//Previously as Game()
+function StarSums(props) {
     const [objStars, setObjStars] = useState(utils.random(1, 9)); //create stars randomly
     const [tempNum,setTempNum] = useState([]); //empty array to take input
     const [availableNum, setAvailableNum] = useState(utils.range(1,9)); //set a range of numbers for the input btns
@@ -99,7 +100,6 @@ function Game() {
     
     //React.useEffect to run the JS script setTimeout()
     useEffect(() => {
-
         //as long as countDownTimer has not been depleted to 0 
         //AND playing btns not used up...
         if (countDownTimer > 0 && availableNum.length > 0) {
@@ -194,7 +194,7 @@ function Game() {
 
                     <div className="left">
                         {
-                            (gameStat !== 'active') ? <ResetGame onClick={reInitialise} gameStat={gameStat} />
+                            (gameStat !== 'active') ? <ResetGame onClick={props.startNewSession} gameStat={gameStat} />
                             :
                             <StarsComponent randStarNum={objStars} />
                         }
@@ -217,6 +217,21 @@ function Game() {
                 <div className="timer">Time Remaining: {countDownTimer}</div>
             </div>
         </section>
+    );
+}
+
+//Made Game() component as a container of the "game" (StarSums())
+function Game() {
+
+    //create a 'sessionID' to use as a game reset action instead of const reInitialise
+    const [sessionID,setSessionID] = useState(1); //start as session 1 on fresh load
+
+    console.clear(); //clear first (clear console of a previous game after hitting "Play Again"... if any)
+    console.log('Game Session *' + sessionID + '* has started'); //log
+
+    return (
+        //The game component
+        <StarSums key={sessionID} startNewSession={() => setSessionID(utils.randomiseSession(2,1000000))} />
     );
 }
 

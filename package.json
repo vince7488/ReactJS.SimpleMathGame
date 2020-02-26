@@ -1,7 +1,7 @@
 {
-  "name": "ReactJS.SimpleMathGame",
+  "name": "reactmathgame",
   "version": "0.0.1",
-  "description": "A basic math game where you perform operations on different numbers to match a given number until all blocks are covered",
+  "description": "A basic math game where you pick a number or a group of number which equal to the sum value of elements/objects presented.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

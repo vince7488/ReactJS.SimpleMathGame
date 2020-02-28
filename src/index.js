@@ -210,7 +210,7 @@ function StarSums(props) {
             </header>
             <section>
                 <h2 className="help">
-                    Pick 1 or more numbers that sum to the number of stars
+                    Pick 1 or more numbers that sum to the number of stars (<a href="https://github.com/vince7488/ReactJS.SimpleMathGame" target="_blank" rel="nofollow">GitHub</a>)
                 </h2>
                 <div className="game-container">
 

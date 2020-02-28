@@ -123,15 +123,14 @@ function ResetGame(props) {
     //see the controller for this button in const reInitialise
     return (
         <>
-            <div>
+            <div className="game-end-container">
                 <span className={`game-end-stat ${((props.gameStat === 'lost') ? 'islost' : 'iswon')}`}>
-                    {(props.gameStat === 'lost') ? 'Game Over' : 'Great!'}
+                    {(props.gameStat === 'lost') ? 'Game Over.' : 'Great!'}
                 </span>
+                <button type="reset" onClick={props.onClick}>
+                    Play Again?
+                </button>
             </div>
-
-            <button type="reset" onClick={props.onClick}>
-                Play Again!
-            </button>
         </>
     );
 }
@@ -151,6 +150,8 @@ function StarSums(props) {
     ///// start of game caclulations
     //variable to trigger when Sum is wrong
     const wrongSumNumbers = utils.sum(tempNum) > objStars;
+
+    const almostUp = (countDownTimer <= 3 && countDownTimer > 0 && availableNum.length !== 0) ? true : false;
 
     //const gameComplete = availableNum.length === 0; //outed, in favour of gameStat
 
@@ -213,29 +214,30 @@ function StarSums(props) {
                 </h2>
                 <div className="game-container">
 
-                    <div className="stars-panel">
-                        {
-                            (gameStat !== 'active') ? <ResetGame onClick={props.startNewSession} gameStat={gameStat} />
-                            :
-                            <StarsComponent randStarNum={objStars} />
-                        }
-                        
+                    <div className="aspect-ratio-1-1">
+                        <div className="stars-panel content">
+                            {
+                                (gameStat !== 'active') ? <ResetGame onClick={props.startNewSession} gameStat={gameStat} />
+                                    :
+                                    <StarsComponent randStarNum={objStars} />
+                            }
+                        </div>
                     </div>
-
-                    <div className="numbers-panel">
-                        {utils.range(1,9).map(numIndex =>
-                            <NumButton 
-                                key={numIndex}
-                                btnStatus={currentNumberStatus(numIndex)}
-                                btnNum={numIndex} 
-                                onClick={onNumButtonClk} //run the function to set Status; 
-                            />
-                        )}
+                    <div className="aspect-ratio-1-1">
+                        <div className="numbers-panel content">
+                            {utils.range(1, 9).map(numIndex =>
+                                <NumButton
+                                    key={numIndex}
+                                    btnStatus={currentNumberStatus(numIndex)}
+                                    btnNum={numIndex}
+                                    onClick={onNumButtonClk} //run the function to set Status; 
+                                />
+                            )}
+                        </div>
                     </div>
-
                 </div>
 
-                <div className="timer">Time Remaining: {countDownTimer}</div>
+                <div className="timer">Time Remaining: <span className={`${((almostUp == true) ? 'almost-up ' : '')}the-time`}>{countDownTimer}</span></div>
             </section>
         </>
     );

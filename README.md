@@ -23,7 +23,10 @@ To start the project in Node:
 
     npm -y init
 
-Install necessities
+Simple installation:
+run `npm install`
+
+(Really detailed) Install necessities
 
 1. `npm install --save express react react-dom`
 2. `npm install --save-dev webpack webpack-cli babel-loader @babel/core @babel/preset-react @babel/plugin-proposal-class-properties html-webpack-plugin`
@@ -41,3 +44,5 @@ Additionally, run the following:
 * `npm i --save-dev less-plugin-clean-css@latest`
 * `npm i --save-dev file-loader`
 * `npm i --save-dev terser-webpack-plugin`
+
+3. then run `node start.js`

@@ -1,12 +1,18 @@
 {
   "name": "reactmathgame",
-  "version": "0.0.1",
+  "version": "2.0.0",
   "description": "A basic math game where you pick a number or a group of number which equal to the sum value of elements/objects presented.",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "repository": {
     "type": "git",
@@ -24,11 +30,24 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.6.0",
+    "jsdom": "^26.1.0",
     "less": "^4.2.1",
+    "prettier": "^3.8.3",
     "typescript": "^5.7.2",
-    "vite": "^6.1.0"
+    "typescript-eslint": "^8.61.0",
+    "vite": "^6.1.0",
+    "vitest": "^3.2.6"
   }
 }

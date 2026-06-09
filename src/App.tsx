@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { random, randomSumIn, range, sum } from "./game/math";
 
 const colors = {
   available: "rgb(230,230,230)",
@@ -9,36 +10,6 @@ const colors = {
 
 type ButtonStatus = keyof typeof colors;
 type GameStatus = "active" | "lost" | "win";
-
-const sum = (numbers: number[]) =>
-  numbers.reduce((total, number) => total + number, 0);
-
-const range = (min: number, max: number) =>
-  Array.from({ length: max - min + 1 }, (_, index) => min + index);
-
-const random = (min: number, max: number) =>
-  min + Math.floor(Math.random() * (max - min + 1));
-
-const randomSumIn = (numbers: number[], max: number) => {
-  const sets: number[][] = [[]];
-  const sums: number[] = [];
-
-  for (const number of numbers) {
-    const existingSetCount = sets.length;
-
-    for (let index = 0; index < existingSetCount; index += 1) {
-      const candidateSet = [...sets[index], number];
-      const candidateSum = sum(candidateSet);
-
-      if (candidateSum <= max) {
-        sets.push(candidateSet);
-        sums.push(candidateSum);
-      }
-    }
-  }
-
-  return sums[random(0, sums.length - 1)];
-};
 
 function useGameState() {
   const [starCount, setStarCount] = useState(() => random(1, 9));
@@ -108,6 +79,7 @@ interface NumberButtonProps {
 function NumberButton({ number, onClick, status }: NumberButtonProps) {
   return (
     <button
+      aria-label={`Number ${number}: ${status}`}
       className="btn-number"
       style={{
         backgroundColor: colors[status],
@@ -157,11 +129,7 @@ function StarSums({ startNewSession }: StarSumsProps) {
   const isAlmostOutOfTime =
     countdown <= 3 && countdown > 0 && availableNumbers.length > 0;
   const gameStatus: GameStatus =
-    availableNumbers.length === 0
-      ? "win"
-      : countdown <= 0
-        ? "lost"
-        : "active";
+    availableNumbers.length === 0 ? "win" : countdown <= 0 ? "lost" : "active";
 
   const currentNumberStatus = (number: number): ButtonStatus => {
     if (!availableNumbers.includes(number)) {
@@ -204,7 +172,7 @@ function StarSums({ startNewSession }: StarSumsProps) {
           <a
             href="https://github.com/vince7488/ReactJS.SimpleMathGame"
             target="_blank"
-            rel="noreferrer"
+            rel="noreferrer noopener"
           >
             GitHub
           </a>
@@ -212,14 +180,14 @@ function StarSums({ startNewSession }: StarSumsProps) {
         </h2>
         <div className="game-container">
           <div className="aspect-ratio-1-1">
-            <div className="stars-panel content">
+            <div
+              aria-label={`Target: ${starCount} stars`}
+              className="stars-panel content"
+            >
               {gameStatus === "active" ? (
                 <Stars count={starCount} />
               ) : (
-                <ResetGame
-                  gameStatus={gameStatus}
-                  onClick={startNewSession}
-                />
+                <ResetGame gameStatus={gameStatus} onClick={startNewSession} />
               )}
             </div>
           </div>
@@ -253,7 +221,9 @@ export default function App() {
   return (
     <StarSums
       key={sessionId}
-      startNewSession={() => setSessionId((currentSession) => currentSession + 1)}
+      startNewSession={() =>
+        setSessionId((currentSession) => currentSession + 1)
+      }
     />
   );
 }

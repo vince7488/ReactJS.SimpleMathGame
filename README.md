@@ -1,30 +1,40 @@
-![ReactJS Logo. Subjected to Copyright. Facebook Inc. From Wikimedia.org](https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg)
+# Simple Math Game
 
-# ReactJS.SimpleMathGame
-*A basic math game(Children's Math Game perhaps)*
+A children's math game where players select one or more numbers that add up to
+the displayed number of stars. Use every number before the countdown expires to
+win.
 
-version: 0.0.001
+## Current Stack
 
-Author: **[Vernard Mercader](http://vernard.net)**
+- React 19 with TypeScript
+- Vite for development and production builds
+- Less for styling
+- ESLint and Prettier for code quality and formatting
+- Vitest and React Testing Library for automated tests
 
-Instructor: **[Samer Buna](http://edgecoders.com)**
+## Modernization
 
-Live Demo: **[http://vmdataserv.com/react-starsumsgame](http://vmdataserv.com/react-starsumsgame)**
+This project was converted from JavaScript to React with TypeScript. Its legacy
+Webpack, Babel, and Express development setup was replaced with Vite. ESLint,
+Prettier, Vitest, and React Testing Library were added to support ongoing
+development.
 
-Keywords: React, TypeScript, Vite, Less, Math
+## Requirements
 
-A basic math game(Children's Math Game perhaps) where you pick a number or a group of number which equal to the sum value of elements/objects presented. The goal is simple: (1) make it before the timer ends; (2) You can only pick a number once; (3) You can add any group of numbers to get to a sum equal to the number of objects (Star), or you can pick only one (which would be the number of stars present); (4) If all of the 9 numbers are picked, you win the game.  
+- Node.js 22
+- npm
 
-It's a simple game where React focuses on UI Logic states, and majority of the "brains" of the program are JavaScript Math.
+## Run Locally
 
-## Development
-
-This project uses React, TypeScript, Vite, and Less.
-
-Install dependencies and start the development server:
+Install dependencies:
 
 ```sh
 npm install
+```
+
+Start the Vite development server:
+
+```sh
 npm run dev
 ```
 
@@ -34,3 +44,34 @@ Create and preview a production build:
 npm run build
 npm run preview
 ```
+
+## Quality Checks
+
+Run the automated tests:
+
+```sh
+npm test
+npm run test:watch
+```
+
+Check linting and formatting:
+
+```sh
+npm run lint
+npm run format:check
+```
+
+Apply automatic lint and formatting fixes:
+
+```sh
+npm run lint:fix
+npm run format
+```
+
+## Game Rules
+
+1. Select one or more numbers whose sum equals the number of displayed stars.
+2. Each number can only be used once.
+3. Use all nine numbers before the timer expires to win.
+
+Author: [Vernard Mercader](http://vernard.net)

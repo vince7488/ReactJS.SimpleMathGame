@@ -1,11 +1,18 @@
 {
   "name": "reactmathgame",
-  "version": "0.0.1",
+  "version": "2.0.0",
   "description": "A basic math game where you pick a number or a group of number which equal to the sum value of elements/objects presented.",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "repository": {
     "type": "git",
@@ -19,29 +26,28 @@
   },
   "homepage": "https://github.com/vince7488/ReactJS.SimpleMathGame#readme",
   "dependencies": {
-    "express": "^4.17.1",
-    "less": "^3.11.1",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.4",
-    "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "@babel/preset-react": "^7.8.3",
-    "autoprefixer": "^9.7.4",
-    "babel-loader": "^8.0.6",
-    "clean-webpack-plugin": "^3.0.0",
-    "css-loader": "^3.4.2",
-    "cssnano": "^4.1.10",
-    "file-loader": "^5.1.0",
-    "html-webpack-plugin": "^3.2.0",
-    "less-loader": "^5.0.0",
-    "less-plugin-clean-css": "^1.5.1",
-    "mini-css-extract-plugin": "^0.9.0",
-    "postcss-loader": "^3.0.0",
-    "style-loader": "^1.1.3",
-    "terser-webpack-plugin": "^2.3.5",
-    "webpack": "^4.41.6",
-    "webpack-cli": "^3.3.11"
+    "@eslint/js": "^9.39.4",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.6.0",
+    "jsdom": "^26.1.0",
+    "less": "^4.2.1",
+    "prettier": "^3.8.3",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.61.0",
+    "vite": "^6.1.0",
+    "vitest": "^3.2.6"
   }
 }

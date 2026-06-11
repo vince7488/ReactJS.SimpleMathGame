@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { random, randomSumIn, range, sum } from "./math";
+import { random, randomSumIn, range, sum } from "./game";
 
 describe("game math utilities", () => {
   afterEach(() => {

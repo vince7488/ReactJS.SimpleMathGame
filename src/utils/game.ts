@@ -1,3 +1,5 @@
+export const NUMBER_PAD_ORDER = [7, 8, 9, 4, 5, 6, 1, 2, 3] as const;
+
 export const sum = (numbers: number[]) =>
   numbers.reduce((total, number) => total + number, 0);
 

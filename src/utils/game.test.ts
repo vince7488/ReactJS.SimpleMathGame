@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { random, randomSumIn, range, sum } from "./game";
+import { NUMBER_PAD_ORDER, random, randomSumIn, range, sum } from "./game";
 
 describe("game math utilities", () => {
   afterEach(() => {
@@ -13,6 +13,10 @@ describe("game math utilities", () => {
 
   it("creates an inclusive number range", () => {
     expect(range(2, 5)).toEqual([2, 3, 4, 5]);
+  });
+
+  it("orders choices like a computer number pad", () => {
+    expect(NUMBER_PAD_ORDER).toEqual([7, 8, 9, 4, 5, 6, 1, 2, 3]);
   });
 
   it("returns an inclusive random number", () => {

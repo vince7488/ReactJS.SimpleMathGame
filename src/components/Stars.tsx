@@ -5,11 +5,19 @@ interface StarsProps {
 }
 
 export function Stars({ count }: StarsProps) {
+  const starLabel = `${count} ${count === 1 ? "star" : "stars"}`;
+
   return (
-    <>
+    <div
+      aria-label={`Target: ${starLabel}`}
+      className="stars-display"
+      role="img"
+    >
       {range(1, count).map((starId) => (
-        <div key={starId} className="star" />
+        <span key={starId} aria-hidden="true" className="star">
+          ★
+        </span>
       ))}
-    </>
+    </div>
   );
 }

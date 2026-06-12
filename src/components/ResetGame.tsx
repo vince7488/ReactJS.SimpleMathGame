@@ -13,8 +13,13 @@ export function ResetGame({ gameStatus, onClick }: ResetGameProps) {
       >
         {gameStatus === "lost" ? "Game Over." : "Great!"}
       </span>
-      <button type="reset" onClick={onClick}>
-        Play Again?
+      <p>
+        {gameStatus === "lost"
+          ? "The clock won this round."
+          : "Every number found its place."}
+      </p>
+      <button aria-keyshortcuts="R" type="reset" onClick={onClick}>
+        Play again <kbd>R</kbd>
       </button>
     </div>
   );

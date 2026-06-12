@@ -140,6 +140,7 @@ build
 *.bak
 /exercise_bin
 /.vscode
+/.tools
 
 ###################################
 # official gitignore repo:

@@ -1,5 +1,15 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { NUMBER_PAD_ORDER, random, randomSumIn, range, sum } from "./game";
+import {
+  getGameStatus,
+  getNumberStatus,
+  getSelectionFeedback,
+  getUpdatedSelection,
+  NUMBER_PAD_ORDER,
+  random,
+  randomSumIn,
+  range,
+  sum,
+} from "./game";
 
 describe("game math utilities", () => {
   afterEach(() => {
@@ -30,5 +40,28 @@ describe("game math utilities", () => {
     vi.spyOn(Math, "random").mockReturnValue(0.999);
 
     expect(randomSumIn([2, 4, 8], 9)).toBe(8);
+  });
+
+  it("derives game and number statuses", () => {
+    expect(getGameStatus(0, 5)).toBe("win");
+    expect(getGameStatus(3, 0)).toBe("lost");
+    expect(getGameStatus(3, 5)).toBe("active");
+
+    expect(getNumberStatus(1, [2, 3], [], 3)).toBe("used");
+    expect(getNumberStatus(2, [2, 3], [2], 3)).toBe("temp");
+    expect(getNumberStatus(3, [2, 3], [2, 3], 3)).toBe("wrong");
+    expect(getNumberStatus(3, [2, 3], [], 3)).toBe("available");
+  });
+
+  it("updates selections and generates feedback", () => {
+    expect(getUpdatedSelection(2, "available", [1])).toEqual([1, 2]);
+    expect(getUpdatedSelection(2, "temp", [1, 2])).toEqual([1]);
+
+    expect(getSelectionFeedback([1, 2], 3)).toBe(
+      "Correct. Those numbers are now used.",
+    );
+    expect(getSelectionFeedback([2, 3], 3)).toContain("Too high: 5");
+    expect(getSelectionFeedback([1], 3)).toBe("Selected total: 1. Target: 3.");
+    expect(getSelectionFeedback([], 3)).toBe("Selection cleared.");
   });
 });

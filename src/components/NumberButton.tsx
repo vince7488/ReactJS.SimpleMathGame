@@ -3,7 +3,7 @@ import type { ButtonStatus } from "../types/game";
 interface NumberButtonProps {
   disabled: boolean;
   number: number;
-  onClick: (number: number, status: ButtonStatus) => void;
+  onClick: (number: number) => void;
   status: ButtonStatus;
 }
 
@@ -21,7 +21,7 @@ export function NumberButton({
       data-number={number}
       data-status={status}
       disabled={disabled}
-      onClick={() => onClick(number, status)}
+      onClick={() => onClick(number)}
     >
       <span>{number}</span>
       <kbd>{number}</kbd>

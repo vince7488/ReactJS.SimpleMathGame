@@ -11,15 +11,18 @@ import { useGameState } from "./useGameState";
 
 export function useGameController(startNewSession: () => void) {
   const [feedback, setFeedback] = useState(INITIAL_GAME_FEEDBACK);
+  const [isGameStarted, setIsGameStarted] = useState(false);
   const {
     availableNumbers,
     countdown,
     selectedNumbers,
     starCount,
     updateGameState,
-  } = useGameState();
+  } = useGameState(isGameStarted);
 
-  const gameStatus = getGameStatus(availableNumbers.length, countdown);
+  const gameStatus = isGameStarted
+    ? getGameStatus(availableNumbers.length, countdown)
+    : "ready";
   const isAlmostOutOfTime =
     countdown <= 3 && countdown > 0 && availableNumbers.length > 0;
 
@@ -57,10 +60,17 @@ export function useGameController(startNewSession: () => void) {
     setFeedback("Selection cleared.");
   };
 
+  const startGame = () => {
+    if (gameStatus === "ready") {
+      setIsGameStarted(true);
+    }
+  };
+
   useGameKeyboard({
     gameStatus,
     onClearSelection: clearSelection,
     onNumberSelect: selectNumber,
+    onStartGame: startGame,
     onStartNewSession: startNewSession,
   });
 
@@ -73,6 +83,7 @@ export function useGameController(startNewSession: () => void) {
     selectedNumberCount: selectedNumbers.length,
     clearSelection,
     selectNumber,
+    startGame,
     starCount,
   };
 }

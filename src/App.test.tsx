@@ -13,8 +13,41 @@ describe("core gameplay", () => {
     vi.restoreAllMocks();
   });
 
-  it("renders the target and all available number buttons", () => {
+  it("waits for the user before starting the game", async () => {
+    vi.useFakeTimers();
     render(<App />);
+
+    expect(screen.getByText("Ready to Start?")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Start game/ }),
+    ).toBeInTheDocument();
+    expect(Math.random).toHaveBeenCalledTimes(1);
+
+    fireEvent.keyDown(window, { key: "r" });
+
+    expect(Math.random).toHaveBeenCalledTimes(1);
+    expect(
+      screen.getAllByRole("button", { name: /Number \d: available/ }),
+    ).toHaveLength(9);
+    for (const numberButton of screen.getAllByRole("button", {
+      name: /Number \d: available/,
+    })) {
+      expect(numberButton).toBeDisabled();
+    }
+
+    await act(async () => {
+      vi.advanceTimersByTime(3000);
+    });
+
+    expect(
+      screen.getByRole("timer", { name: "10 seconds remaining" }),
+    ).toHaveClass("is-paused");
+  });
+
+  it("starts the game with Enter and renders the target", async () => {
+    render(<App />);
+
+    fireEvent.keyDown(window, { key: "Enter" });
 
     expect(
       screen.getByRole("img", { name: "Target: 1 star" }),
@@ -29,13 +62,14 @@ describe("core gameplay", () => {
     ).toEqual(["7", "8", "9", "4", "5", "6", "1", "2", "3"]);
     expect(
       screen.getByRole("timer", { name: "10 seconds remaining" }),
-    ).toBeInTheDocument();
+    ).not.toHaveClass("is-paused");
   });
 
   it("marks a selected number as wrong when its sum exceeds the target", async () => {
     const user = userEvent.setup();
     render(<App />);
 
+    await user.click(screen.getByRole("button", { name: /Start game/ }));
     await user.click(
       screen.getByRole("button", { name: "Number 2: available" }),
     );
@@ -50,6 +84,7 @@ describe("core gameplay", () => {
     const user = userEvent.setup();
     render(<App />);
 
+    await user.click(screen.getByRole("button", { name: /Start game/ }));
     await user.click(
       screen.getByRole("button", { name: "Number 1: available" }),
     );
@@ -66,6 +101,13 @@ describe("core gameplay", () => {
     const user = userEvent.setup();
     render(<App />);
 
+    await user.keyboard("2");
+
+    expect(
+      screen.getByRole("button", { name: "Number 2: available" }),
+    ).toBeDisabled();
+
+    await user.keyboard("{Enter}");
     await user.keyboard("2");
 
     expect(
@@ -91,6 +133,8 @@ describe("core gameplay", () => {
     vi.useFakeTimers();
     render(<App />);
 
+    fireEvent.keyDown(window, { key: "Enter" });
+
     for (let second = 0; second < 10; second += 1) {
       await act(async () => {
         vi.advanceTimersByTime(1000);
@@ -104,8 +148,9 @@ describe("core gameplay", () => {
 
     fireEvent.keyDown(window, { key: "r" });
 
+    expect(screen.getByText("Ready to Start?")).toBeInTheDocument();
     expect(
-      screen.getByRole("img", { name: "Target: 1 star" }),
-    ).toBeInTheDocument();
+      screen.getByRole("timer", { name: "10 seconds remaining" }),
+    ).toHaveClass("is-paused");
   });
 });

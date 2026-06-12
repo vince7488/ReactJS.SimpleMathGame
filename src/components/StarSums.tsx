@@ -1,6 +1,7 @@
 import { useGameController } from "../hooks/useGameController";
 import { NUMBER_PAD_ORDER } from "../utils/game";
 import { NumberButton } from "./NumberButton";
+import { ReadyGame } from "./ReadyGame";
 import { ResetGame } from "./ResetGame";
 import { Stars } from "./Stars";
 
@@ -18,6 +19,7 @@ export function StarSums({ startNewSession }: StarSumsProps) {
     isAlmostOutOfTime,
     selectedNumberCount,
     selectNumber,
+    startGame,
     starCount,
   } = useGameController(startNewSession);
 
@@ -45,7 +47,7 @@ export function StarSums({ startNewSession }: StarSumsProps) {
           View source
         </a>
       </header>
-      <main className="game-board">
+      <main className="game-board" data-game-status={gameStatus}>
         <section
           className="game-panel target-panel"
           aria-labelledby="target-title"
@@ -54,14 +56,16 @@ export function StarSums({ startNewSession }: StarSumsProps) {
             <div>
               <p className="panel-kicker">Your target</p>
               <h2 aria-live="polite" id="target-title">
-                {gameStatus === "active"
-                  ? `${starCount} ${starCount === 1 ? "star" : "stars"}`
-                  : "Round complete"}
+                {gameStatus === "ready"
+                  ? "Waiting to begin"
+                  : gameStatus === "active"
+                    ? `${starCount} ${starCount === 1 ? "star" : "stars"}`
+                    : "Round complete"}
               </h2>
             </div>
             <div
               aria-label={`${countdown} seconds remaining`}
-              className={`timer ${isAlmostOutOfTime ? "almost-up" : ""}`}
+              className={`timer ${gameStatus === "ready" ? "is-paused" : ""} ${isAlmostOutOfTime ? "almost-up" : ""}`}
               role="timer"
             >
               <span className="timer-label">Time Remaining:</span>
@@ -70,7 +74,9 @@ export function StarSums({ startNewSession }: StarSumsProps) {
             </div>
           </div>
           <div className="stars-stage">
-            {gameStatus === "active" ? (
+            {gameStatus === "ready" ? (
+              <ReadyGame onClick={startGame} />
+            ) : gameStatus === "active" ? (
               <Stars count={starCount} />
             ) : (
               <ResetGame gameStatus={gameStatus} onClick={startNewSession} />

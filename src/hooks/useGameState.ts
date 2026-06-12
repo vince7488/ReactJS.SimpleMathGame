@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { random, randomSumIn, range, sum } from "../utils/game";
 
-export function useGameState() {
+export function useGameState(isRunning: boolean) {
   const [starCount, setStarCount] = useState(() => random(1, 9));
   const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
   const [availableNumbers, setAvailableNumbers] = useState(() => range(1, 9));
   const [countdown, setCountdown] = useState(10);
 
   useEffect(() => {
-    if (countdown <= 0 || availableNumbers.length === 0) {
+    if (!isRunning || countdown <= 0 || availableNumbers.length === 0) {
       return;
     }
 
@@ -17,7 +17,7 @@ export function useGameState() {
     }, 1000);
 
     return () => window.clearTimeout(timer);
-  }, [availableNumbers.length, countdown]);
+  }, [availableNumbers.length, countdown, isRunning]);
 
   const updateGameState = (newSelectedNumbers: number[]) => {
     if (sum(newSelectedNumbers) !== starCount) {

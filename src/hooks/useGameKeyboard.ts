@@ -5,6 +5,7 @@ interface UseGameKeyboardOptions {
   gameStatus: GameStatus;
   onClearSelection: () => void;
   onNumberSelect: (number: number) => void;
+  onStartGame: () => void;
   onStartNewSession: () => void;
 }
 
@@ -12,6 +13,7 @@ export function useGameKeyboard({
   gameStatus,
   onClearSelection,
   onNumberSelect,
+  onStartGame,
   onStartNewSession,
 }: UseGameKeyboardOptions) {
   const handleKeyDown = useEffectEvent((event: KeyboardEvent) => {
@@ -24,11 +26,17 @@ export function useGameKeyboard({
       return;
     }
 
-    if (/^[1-9]$/.test(event.key)) {
+    if (event.key === "Enter" && gameStatus === "ready") {
+      event.preventDefault();
+      onStartGame();
+    } else if (/^[1-9]$/.test(event.key)) {
       onNumberSelect(Number(event.key));
     } else if (event.key === "Escape") {
       onClearSelection();
-    } else if (event.key.toLowerCase() === "r" && gameStatus !== "active") {
+    } else if (
+      event.key.toLowerCase() === "r" &&
+      (gameStatus === "lost" || gameStatus === "win")
+    ) {
       onStartNewSession();
     }
   });

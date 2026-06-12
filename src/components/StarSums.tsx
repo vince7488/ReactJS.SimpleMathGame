@@ -27,11 +27,7 @@ export function StarSums({ startNewSession }: StarSumsProps) {
         <div>
           <p className="eyebrow">
             Quick sums · nine numbers · ten seconds · by{" "}
-            <a
-              href="https://vernard.net"
-              target="_blank"
-              rel="noopener indexer"
-            >
+            <a href="https://vernard.net" target="_blank" rel="noopener">
               Vernard Mercader
             </a>
           </p>

@@ -26,10 +26,11 @@ export function StarSums({ startNewSession }: StarSumsProps) {
       <header className="game-header">
         <div>
           <p className="eyebrow">
-            Quick sums · nine numbers · ten seconds · by{" "}
+            Quick sums · nine numbers · by{" "}
             <a href="https://vernard.net" target="_blank" rel="noopener">
               Vernard Mercader
-            </a>
+            </a>{" "}
+            · Have fun!
           </p>
           <h1>
             Star <em>Sum</em>

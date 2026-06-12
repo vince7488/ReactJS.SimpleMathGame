@@ -21,6 +21,12 @@ describe("core gameplay", () => {
     expect(
       screen.getByRole("button", { name: /Start game/ }),
     ).toBeInTheDocument();
+    expect(screen.getByRole("slider", { name: "Difficulty" })).toHaveValue("4");
+    expect(screen.getByRole("slider", { name: "Difficulty" })).toHaveAttribute(
+      "aria-valuetext",
+      "Level 4, 10 seconds",
+    );
+    expect(screen.getByText("Medium 4")).toHaveClass("difficulty-badge");
     expect(Math.random).toHaveBeenCalledTimes(1);
 
     fireEvent.keyDown(window, { key: "r" });
@@ -42,6 +48,44 @@ describe("core gameplay", () => {
     expect(
       screen.getByRole("timer", { name: "10 seconds remaining" }),
     ).toHaveClass("is-paused");
+  });
+
+  it("snaps difficulty levels to their configured countdowns", () => {
+    render(<App />);
+
+    const difficulty = screen.getByRole("slider", { name: "Difficulty" });
+    const countdowns = [20, 15, 12, 10, 8, 5, 3];
+
+    expect(difficulty).toHaveAttribute("min", "1");
+    expect(difficulty).toHaveAttribute("max", "7");
+    expect(difficulty).toHaveAttribute("step", "1");
+
+    for (const [index, countdown] of countdowns.entries()) {
+      const level = index + 1;
+
+      fireEvent.change(difficulty, { target: { value: String(level) } });
+
+      expect(difficulty).toHaveValue(String(level));
+      expect(difficulty).toHaveAttribute(
+        "aria-valuetext",
+        `Level ${level}, ${countdown} seconds`,
+      );
+      expect(
+        screen.getByText(
+          `${level <= 3 ? "Easy" : level === 4 ? "Medium" : "Hard"} ${level}`,
+        ),
+      ).toHaveClass("difficulty-badge");
+      expect(
+        screen.getByRole("timer", {
+          name: `${countdown} seconds remaining`,
+        }),
+      ).toHaveClass("is-paused");
+      expect(
+        screen.getByRole("timer", {
+          name: `${countdown} seconds remaining`,
+        }),
+      ).not.toHaveClass("almost-up");
+    }
   });
 
   it("starts the game with Enter and renders the target", async () => {
@@ -133,9 +177,16 @@ describe("core gameplay", () => {
     vi.useFakeTimers();
     render(<App />);
 
+    fireEvent.change(screen.getByRole("slider", { name: "Difficulty" }), {
+      target: { value: "7" },
+    });
     fireEvent.keyDown(window, { key: "Enter" });
 
-    for (let second = 0; second < 10; second += 1) {
+    expect(
+      screen.queryByRole("slider", { name: "Difficulty" }),
+    ).not.toBeInTheDocument();
+
+    for (let second = 0; second < 3; second += 1) {
       await act(async () => {
         vi.advanceTimersByTime(1000);
       });
@@ -152,5 +203,6 @@ describe("core gameplay", () => {
     expect(
       screen.getByRole("timer", { name: "10 seconds remaining" }),
     ).toHaveClass("is-paused");
+    expect(screen.getByRole("slider", { name: "Difficulty" })).toHaveValue("4");
   });
 });

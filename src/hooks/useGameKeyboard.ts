@@ -51,6 +51,8 @@ function isEditableTarget(target: EventTarget | null) {
   return (
     target instanceof HTMLElement &&
     (target.isContentEditable ||
-      target.matches("input, textarea, select, [role='textbox']"))
+      target.matches(
+        "input:not([type='range']), textarea, select, [role='textbox']",
+      ))
   );
 }

@@ -1,6 +1,25 @@
-import type { ButtonStatus, GameStatus } from "../types/game";
+import type { ButtonStatus, DifficultyLevel, GameStatus } from "../types/game";
 
 export const NUMBER_PAD_ORDER = [7, 8, 9, 4, 5, 6, 1, 2, 3] as const;
+export const DEFAULT_DIFFICULTY: DifficultyLevel = 4;
+export const DIFFICULTY_SECONDS: Record<DifficultyLevel, number> = {
+  1: 20,
+  2: 15,
+  3: 12,
+  4: 10,
+  5: 8,
+  6: 5,
+  7: 3,
+};
+
+export const getDifficultyLabel = (difficulty: DifficultyLevel) => {
+  if (difficulty <= 3) {
+    return "Easy";
+  }
+
+  return difficulty === 4 ? "Medium" : "Hard";
+};
+
 export const INITIAL_GAME_FEEDBACK =
   "Choose one or more numbers to match the stars.";
 

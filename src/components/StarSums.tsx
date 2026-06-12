@@ -1,5 +1,5 @@
 import { useGameController } from "../hooks/useGameController";
-import { NUMBER_PAD_ORDER } from "../utils/game";
+import { getDifficultyLabel, NUMBER_PAD_ORDER } from "../utils/game";
 import { NumberButton } from "./NumberButton";
 import { ReadyGame } from "./ReadyGame";
 import { ResetGame } from "./ResetGame";
@@ -11,9 +11,11 @@ interface StarSumsProps {
 
 export function StarSums({ startNewSession }: StarSumsProps) {
   const {
+    changeDifficulty,
     clearSelection,
     countdown,
     currentNumberStatus,
+    difficulty,
     feedback,
     gameStatus,
     isAlmostOutOfTime,
@@ -54,7 +56,12 @@ export function StarSums({ startNewSession }: StarSumsProps) {
         >
           <div className="panel-heading">
             <div>
-              <p className="panel-kicker">Your target</p>
+              <div className="target-kicker-row">
+                <p className="panel-kicker">Your target</p>
+                <span className="difficulty-badge">
+                  {getDifficultyLabel(difficulty)} {difficulty}
+                </span>
+              </div>
               <h2 aria-live="polite" id="target-title">
                 {gameStatus === "ready"
                   ? "Waiting to begin"
@@ -75,7 +82,11 @@ export function StarSums({ startNewSession }: StarSumsProps) {
           </div>
           <div className="stars-stage">
             {gameStatus === "ready" ? (
-              <ReadyGame onClick={startGame} />
+              <ReadyGame
+                difficulty={difficulty}
+                onClick={startGame}
+                onDifficultyChange={changeDifficulty}
+              />
             ) : gameStatus === "active" ? (
               <Stars count={starCount} />
             ) : (

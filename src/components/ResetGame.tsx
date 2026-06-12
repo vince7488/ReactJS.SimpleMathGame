@@ -1,7 +1,7 @@
 import type { GameStatus } from "../types/game";
 
 interface ResetGameProps {
-  gameStatus: Exclude<GameStatus, "active">;
+  gameStatus: Extract<GameStatus, "lost" | "win">;
   onClick: () => void;
 }
 

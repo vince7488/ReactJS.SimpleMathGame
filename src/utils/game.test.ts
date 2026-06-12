@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   getGameStatus,
+  getDifficultyLabel,
   getNumberStatus,
   getSelectionFeedback,
   getUpdatedSelection,
@@ -51,6 +52,14 @@ describe("game math utilities", () => {
     expect(getNumberStatus(2, [2, 3], [2], 3)).toBe("temp");
     expect(getNumberStatus(3, [2, 3], [2, 3], 3)).toBe("wrong");
     expect(getNumberStatus(3, [2, 3], [], 3)).toBe("available");
+  });
+
+  it("groups difficulty levels into readable labels", () => {
+    expect(getDifficultyLabel(1)).toBe("Easy");
+    expect(getDifficultyLabel(3)).toBe("Easy");
+    expect(getDifficultyLabel(4)).toBe("Medium");
+    expect(getDifficultyLabel(5)).toBe("Hard");
+    expect(getDifficultyLabel(7)).toBe("Hard");
   });
 
   it("updates selections and generates feedback", () => {

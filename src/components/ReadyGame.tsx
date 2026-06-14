@@ -1,6 +1,6 @@
-import type { ChangeEvent } from "react";
-import type { DifficultyLevel } from "../types/game";
-import { DIFFICULTY_SECONDS } from "../utils/game";
+import type { ChangeEvent } from 'react';
+import type { DifficultyLevel } from '../types/game';
+import { DIFFICULTY_SECONDS } from '../utils/game';
 
 interface ReadyGameProps {
   difficulty: DifficultyLevel;
@@ -20,7 +20,6 @@ export function ReadyGame({
   return (
     <div className="game-end-container">
       <span className="game-end-stat isready">Ready to Start?</span>
-      <p>The clock starts when you do.</p>
       <div className="difficulty-control">
         <label htmlFor="difficulty">Difficulty</label>
         <input

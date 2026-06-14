@@ -12,7 +12,10 @@ import type { DifficultyLevel } from "../types/game";
 import { useGameKeyboard } from "./useGameKeyboard";
 import { useGameState } from "./useGameState";
 
-export function useGameController(startNewSession: () => void) {
+export function useGameController(
+  startNewSession: () => void,
+  isPaused = false,
+) {
   const [feedback, setFeedback] = useState(INITIAL_GAME_FEEDBACK);
   const [difficulty, setDifficulty] = useState(DEFAULT_DIFFICULTY);
   const [isGameStarted, setIsGameStarted] = useState(false);
@@ -23,7 +26,10 @@ export function useGameController(startNewSession: () => void) {
     setReadyCountdown,
     starCount,
     updateGameState,
-  } = useGameState(isGameStarted, DIFFICULTY_SECONDS[difficulty]);
+  } = useGameState(
+    isGameStarted && !isPaused,
+    DIFFICULTY_SECONDS[difficulty],
+  );
 
   const gameStatus = isGameStarted
     ? getGameStatus(availableNumbers.length, countdown)

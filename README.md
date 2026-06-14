@@ -87,20 +87,8 @@ npm run lint:fix
 npm run format
 ```
 
-## Game Rules
+## Game rules
 
-1. Choose a difficulty level, then start the round when you are ready.
-2. Select one or more numbers whose total matches the displayed number of stars.
-3. A correct match uses those numbers and creates a new target.
-4. Each number can be used only once during the round.
-5. Use all nine numbers before the selected difficulty's timer expires to win.
-
-## Controls
-
-- Select numbers by clicking, tapping, or pressing keys `1` through `9`.
-- Clear the current selection with the Clear button or `Escape`.
-- Start a round with the Start Game button or `Enter`.
-- Start another round with the Play Again button or `R`.
-- Open the Help guide for the complete rules and controls.
+Checkout [the github wiki for the game rules and controls](https://github.com/vince7488/ReactJS.SimpleMathGame/wiki/Game-Rules-and-Controls).
 
 Author: [Vernard Mercader](https://vernard.net)

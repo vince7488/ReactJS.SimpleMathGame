@@ -1,15 +1,19 @@
-import { useGameController } from "../hooks/useGameController";
-import { getDifficultyLabel, NUMBER_PAD_ORDER } from "../utils/game";
-import { NumberButton } from "./NumberButton";
-import { ReadyGame } from "./ReadyGame";
-import { ResetGame } from "./ResetGame";
-import { Stars } from "./Stars";
+import { useRef, useState } from 'react';
+import { useGameController } from '../hooks/useGameController';
+import { getDifficultyLabel, NUMBER_PAD_ORDER } from '../utils/game';
+import { HelpModal } from './HelpModal';
+import { NumberButton } from './NumberButton';
+import { ReadyGame } from './ReadyGame';
+import { ResetGame } from './ResetGame';
+import { Stars } from './Stars';
 
 interface StarSumsProps {
   startNewSession: () => void;
 }
 
 export function StarSums({ startNewSession }: StarSumsProps) {
+  const helpButtonRef = useRef<HTMLButtonElement>(null);
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
   const {
     changeDifficulty,
     clearSelection,
@@ -23,31 +27,38 @@ export function StarSums({ startNewSession }: StarSumsProps) {
     selectNumber,
     startGame,
     starCount,
-  } = useGameController(startNewSession);
+  } = useGameController(startNewSession, isHelpOpen);
 
   return (
     <div className="app-shell">
       <header className="game-header">
         <div>
-          <p className="eyebrow">
-            Quick sums · nine numbers · by{" "}
-            <a href="https://vernard.net" target="_blank" rel="noopener">
-              Vernard Mercader
-            </a>{" "}
-            · Have fun!
-          </p>
+          <p className="eyebrow">Quick sums · nine numbers · Have fun!</p>
           <h1>
             Star <em>Sum</em>
           </h1>
         </div>
-        <a
-          className="source-link"
-          href="https://github.com/vince7488/ReactJS.SimpleMathGame"
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          View source
-        </a>
+        <div className="header-actions">
+          <button
+            aria-expanded={isHelpOpen}
+            aria-haspopup="dialog"
+            className="source-link help-button"
+            onClick={() => setIsHelpOpen(true)}
+            onKeyDown={(event) => event.stopPropagation()}
+            ref={helpButtonRef}
+            type="button"
+          >
+            Help
+          </button>
+          <a
+            className="source-link"
+            href="https://github.com/vince7488/ReactJS.SimpleMathGame"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            View source
+          </a>
+        </div>
       </header>
       <main className="game-board" data-game-status={gameStatus}>
         <section
@@ -63,16 +74,16 @@ export function StarSums({ startNewSession }: StarSumsProps) {
                 </span>
               </div>
               <h2 aria-live="polite" id="target-title">
-                {gameStatus === "ready"
-                  ? "Waiting to begin"
-                  : gameStatus === "active"
-                    ? `${starCount} ${starCount === 1 ? "star" : "stars"}`
-                    : "Round complete"}
+                {gameStatus === 'ready'
+                  ? 'Waiting to begin'
+                  : gameStatus === 'active'
+                    ? `${starCount} ${starCount === 1 ? 'star' : 'stars'}`
+                    : 'Round complete'}
               </h2>
             </div>
             <div
               aria-label={`${countdown} seconds remaining`}
-              className={`timer ${gameStatus === "ready" ? "is-paused" : ""} ${isAlmostOutOfTime ? "almost-up" : ""}`}
+              className={`timer ${gameStatus === 'ready' ? 'is-paused' : ''} ${isAlmostOutOfTime ? 'almost-up' : ''}`}
               role="timer"
             >
               <span className="timer-label">Time Remaining:</span>
@@ -81,13 +92,13 @@ export function StarSums({ startNewSession }: StarSumsProps) {
             </div>
           </div>
           <div className="stars-stage">
-            {gameStatus === "ready" ? (
+            {gameStatus === 'ready' ? (
               <ReadyGame
                 difficulty={difficulty}
                 onClick={startGame}
                 onDifficultyChange={changeDifficulty}
               />
-            ) : gameStatus === "active" ? (
+            ) : gameStatus === 'active' ? (
               <Stars count={starCount} />
             ) : (
               <ResetGame gameStatus={gameStatus} onClick={startNewSession} />
@@ -112,7 +123,7 @@ export function StarSums({ startNewSession }: StarSumsProps) {
             {NUMBER_PAD_ORDER.map((number) => (
               <NumberButton
                 key={number}
-                disabled={gameStatus !== "active"}
+                disabled={gameStatus !== 'active'}
                 number={number}
                 status={currentNumberStatus(number)}
                 onClick={selectNumber}
@@ -127,7 +138,7 @@ export function StarSums({ startNewSession }: StarSumsProps) {
               aria-keyshortcuts="Escape"
               className="clear-button"
               data-action="clear"
-              disabled={gameStatus !== "active" || selectedNumberCount === 0}
+              disabled={gameStatus !== 'active' || selectedNumberCount === 0}
               onClick={clearSelection}
               type="button"
             >
@@ -137,8 +148,17 @@ export function StarSums({ startNewSession }: StarSumsProps) {
         </section>
       </main>
       <footer>
-        Match the stars, use each number once, and beat the clock.
+        by{' '}
+        <a href="https://vernard.net" target="_blank" rel="noopener">
+          Vernard Mercader
+        </a>
       </footer>
+      {isHelpOpen ? (
+        <HelpModal
+          onClose={() => setIsHelpOpen(false)}
+          returnFocusRef={helpButtonRef}
+        />
+      ) : null}
     </div>
   );
 }

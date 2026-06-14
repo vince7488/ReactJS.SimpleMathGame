@@ -109,6 +109,72 @@ describe("core gameplay", () => {
     ).not.toHaveClass("is-paused");
   });
 
+  it("opens help in an accessible modal without triggering gameplay behind it", async () => {
+    vi.useFakeTimers();
+    render(<App />);
+
+    fireEvent.keyDown(window, { key: "Enter" });
+
+    await act(async () => {
+      vi.advanceTimersByTime(1000);
+    });
+
+    const helpButton = screen.getByRole("button", { name: "Help" });
+    fireEvent.click(helpButton);
+
+    expect(
+      screen.getByRole("dialog", { name: "How to play Star Sum" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Close help" }),
+    ).toHaveFocus();
+    expect(
+      screen.getByText(/Use all nine numbers before/),
+    ).toBeInTheDocument();
+
+    fireEvent.keyDown(screen.getByRole("button", { name: "Close help" }), {
+      key: "2",
+    });
+
+    expect(
+      screen.getByRole("button", { name: "Number 2: available" }),
+    ).toHaveAttribute("data-status", "available");
+
+    await act(async () => {
+      vi.advanceTimersByTime(3000);
+    });
+
+    expect(
+      screen.getByRole("timer", { name: "9 seconds remaining" }),
+    ).toBeInTheDocument();
+
+    fireEvent.keyDown(screen.getByRole("button", { name: "Close help" }), {
+      key: "Escape",
+    });
+
+    expect(
+      screen.queryByRole("dialog", { name: "How to play Star Sum" }),
+    ).not.toBeInTheDocument();
+    expect(helpButton).toHaveFocus();
+  });
+
+  it("opens help with the keyboard without starting the round", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    const helpButton = screen.getByRole("button", { name: "Help" });
+    helpButton.focus();
+    await user.keyboard("{Enter}");
+
+    expect(
+      screen.getByRole("dialog", { name: "How to play Star Sum" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Ready to Start?")).toBeInTheDocument();
+    expect(
+      screen.getByRole("timer", { name: "10 seconds remaining" }),
+    ).toHaveClass("is-paused");
+  });
+
   it("marks a selected number as wrong when its sum exceeds the target", async () => {
     const user = userEvent.setup();
     render(<App />);

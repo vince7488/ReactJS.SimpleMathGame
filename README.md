@@ -4,6 +4,12 @@ A React-based children's math game where players select one or more numbers that
 
 The purpose of this application is to serve as a compact demonstration of my knowledge of React state management, component composition, event handling, effects, and conditional rendering.
 
+## Play a live Version!
+
+Play the live version here! (ver. 2.0.0) => [http://vmdataserv.com/react-starsumsgame](http://vmdataserv.com/react-starsumsgame/)
+
+(_Note: This is a static demo hosted on `vmdataserv.com`. The site does not require login, does not collect personal information, and does not store or transmit user data. HTTPS/TLS is not currently enabled for this demo._)
+
 ## Current Stack
 
 - React 19 with TypeScript
@@ -14,15 +20,16 @@ The purpose of this application is to serve as a compact demonstration of my kno
 
 ## Updates
 
-- (2026 JUN)
-  - Modernization: This project was converted from JavaScript to React with TypeScript. Its legacy Webpack, Babel, and Express development setup was replaced with Vite. ESLint, Prettier, Vitest, and React Testing Library were added to support ongoing development.
-  - Refactored App, game, and math files into modern, reusable React components.
-  - Improved Accessibility with better colours, keyboard controls, and improved the UI styling.
-  - Improved security by adding a github pull request CI.
-  - Upgraded Node version to 24+.
-  - Adding new features:
-    - Added a "Ready to Start?" button so that the player has time to focus on the game.
-    - Added a "Difficulty Level choice" - adds a few more seconds to the timer if you picked Easy, or normal, compared to the earlier version where it always starts at 10 seconds.
+### (2026 JUN)
+
+- Modernization: This project was converted from JavaScript to React with TypeScript. Its legacy Webpack, Babel, and Express development setup was replaced with Vite. ESLint, Prettier, Vitest, and React Testing Library were added to support ongoing development.
+- Refactored App, game, and math files into modern, reusable React components.
+- Improved Accessibility with better colours, keyboard controls, and improved the UI styling.
+- Improved security by adding a github pull request CI.
+- Upgraded Node version to 24+.
+- Adding new features:
+  - Added a "Ready to Start?" button so that the player has time to focus on the game.
+  - Added a "Difficulty Level choice" - adds a few more seconds to the timer if you picked Easy, or normal, compared to the earlier version where it always starts at 10 seconds.
 
 ## Requirements
 
@@ -82,14 +89,18 @@ npm run format
 
 ## Game Rules
 
-1. Select one or more numbers whose sum equals the number of displayed stars.
-2. Each number can only be used once.
-3. Use all nine numbers before the timer expires to win.
+1. Choose a difficulty level, then start the round when you are ready.
+2. Select one or more numbers whose total matches the displayed number of stars.
+3. A correct match uses those numbers and creates a new target.
+4. Each number can be used only once during the round.
+5. Use all nine numbers before the selected difficulty's timer expires to win.
 
 ## Controls
 
 - Select numbers by clicking, tapping, or pressing keys `1` through `9`.
 - Clear the current selection with the Clear button or `Escape`.
+- Start a round with the Start Game button or `Enter`.
 - Start another round with the Play Again button or `R`.
+- Open the Help guide for the complete rules and controls.
 
 Author: [Vernard Mercader](https://vernard.net)

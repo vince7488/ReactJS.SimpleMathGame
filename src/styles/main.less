@@ -145,6 +145,21 @@ kbd {
   }
 }
 
+.header-actions {
+  display: flex;
+  flex: none;
+  gap: 0.45rem;
+}
+
+.help-button {
+  background: rgba(23, 107, 135, 0.08);
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(23, 107, 135, 0.15);
+  }
+}
+
 .game-board {
   display: grid;
   min-height: 0;
@@ -552,6 +567,119 @@ kbd {
   font-weight: 700;
 }
 
+.help-backdrop {
+  position: fixed;
+  z-index: 20;
+  display: grid;
+  padding:
+    max(0.75rem, env(safe-area-inset-top))
+    max(0.75rem, env(safe-area-inset-right))
+    max(0.75rem, env(safe-area-inset-bottom))
+    max(0.75rem, env(safe-area-inset-left));
+  background: rgba(16, 35, 63, 0.48);
+  inset: 0;
+  place-items: center;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+
+.help-modal {
+  display: grid;
+  width: min(100%, 42rem);
+  max-height: min(90dvh, 48rem);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: clamp(1rem, 3vw, 1.6rem);
+  background: var(--paper);
+  box-shadow: 0 28px 90px rgba(16, 35, 63, 0.32);
+  font-family: "Trebuchet MS", "Gill Sans", sans-serif;
+  font-size: 1rem;
+  grid-template-rows: auto minmax(0, 1fr);
+  line-height: 1.6;
+}
+
+.help-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: clamp(0.85rem, 2.5vw, 1.3rem);
+  border-bottom: 1px solid var(--line);
+  background: rgba(23, 107, 135, 0.05);
+
+  h2,
+  p {
+    margin: 0;
+  }
+
+  h2 {
+    margin-top: 0.12rem;
+    font-family: inherit;
+    font-size: clamp(1.45rem, 4vw, 2rem);
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+  }
+
+  .panel-kicker {
+    font-size: 1rem;
+  }
+}
+
+.help-close-button {
+  flex: none;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid rgba(23, 107, 135, 0.28);
+  border-radius: 999px;
+  background: var(--blue);
+  color: white;
+  cursor: pointer;
+  font-weight: 800;
+
+  &:hover {
+    background: var(--blue-dark);
+  }
+}
+
+.help-modal-content {
+  overflow-y: auto;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  overscroll-behavior: contain;
+
+  > p {
+    margin: 0 0 1.25rem;
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+
+  section + section {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+
+  h3 {
+    margin: 0 0 0.45rem;
+    color: var(--blue-dark);
+    font-family: inherit;
+    font-size: 1.25rem;
+    line-height: 1.2;
+  }
+
+  kbd {
+    font-size: 1rem;
+  }
+
+  ol,
+  ul {
+    margin: 0;
+    padding-left: 1.45rem;
+  }
+
+  li + li {
+    margin-top: 0.45rem;
+  }
+}
+
 .app-shell > footer {
   overflow: hidden;
   color: var(--muted);
@@ -604,8 +732,14 @@ kbd {
   }
 }
 
+@media (max-width: 30rem) {
+  .game-end-container .isready {
+    font-size: clamp(1.35rem, 4vh, 2.8rem);
+  }
+}
+
 @media (max-width: 24rem) {
-  .source-link,
+  .header-actions .source-link:not(.help-button),
   .keyboard-note {
     display: none;
   }

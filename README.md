@@ -1,4 +1,4 @@
-# Simple Math Game
+# StarSums! Simple Math Game
 
 A React-based children's math game where players select one or more numbers that add up to the displayed number of stars. Use every number before the countdown expires to win.
 
